@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "654498548101",
+    "project_id": "questionsolver-88853",
+    "storage_bucket": "questionsolver-88853.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:654498548101:android:adace5b13933347f89dcec",
+        "android_client_info": {
+          "package_name": "com.example.sharequestion"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCF9WSH7sGVnIgJWWo0GWGhQLVxuVkYzH4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
