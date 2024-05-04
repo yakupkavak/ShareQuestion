@@ -40,6 +40,11 @@ class LogInFragment : Fragment() {
 
         val action = LogInFragmentDirections.actionLogInFragmentToFeedFragment()
 
+        //show navigation with live data
+        viewModel.logInSuccess.observe(viewLifecycleOwner){
+            val activity = activity as MainActivity
+            activity.showNavigation()
+        }
 
         binding.signInButton.setOnClickListener {
             //firstly check empty and update email and password.
@@ -47,6 +52,7 @@ class LogInFragment : Fragment() {
                 viewModel.signIn(email!!,password!!){callback ->
                     if (callback){
                         Navigation.findNavController(it).navigate(action)
+
                     }
                     else{
                         Toast.makeText(requireContext(),"User couldn't found!",
