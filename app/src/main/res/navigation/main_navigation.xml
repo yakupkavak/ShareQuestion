@@ -28,6 +28,9 @@
         <action
             android:id="@+id/action_feedFragment_to_logInFragment"
             app:destination="@id/logInFragment" />
+        <action
+            android:id="@+id/action_feedFragment_to_addQuestionFragment"
+            app:destination="@id/addQuestionFragment" />
     </fragment>
     <fragment
         android:id="@+id/changePasswordFragment"
@@ -57,6 +60,21 @@
             app:destination="@id/changePasswordFragment" />
         <action
             android:id="@+id/action_savedFragment_to_logInFragment"
+            app:destination="@id/logInFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addQuestionFragment"
+        android:name="com.example.sharequestion.view.AddQuestionFragment"
+        android:label="fragment_add_question"
+        tools:layout="@layout/fragment_add_question" >
+        <action
+            android:id="@+id/action_addQuestionFragment_to_changePasswordFragment"
+            app:destination="@id/changePasswordFragment" />
+        <action
+            android:id="@+id/action_addQuestionFragment_to_savedFragment"
+            app:destination="@id/savedFragment" />
+        <action
+            android:id="@+id/action_addQuestionFragment_to_logInFragment"
             app:destination="@id/logInFragment" />
     </fragment>
 </navigation>

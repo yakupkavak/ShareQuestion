@@ -8,6 +8,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation
 import com.example.sharequestion.R
 import com.example.sharequestion.databinding.ActivityMainBinding
 import com.example.sharequestion.viewmodel.LogInViewModel
@@ -27,6 +28,13 @@ class MainActivity : AppCompatActivity() {
         binding.bottomNavigationMenu.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.main_screen_menu -> {
+                    true
+                }
+
+                //it goes to add question fragment
+                R.id.add_question_menu ->{
+                    val action = FeedFragmentDirections.actionFeedFragmentToAddQuestionFragment()
+                    Navigation.findNavController(binding.fragmentContainerView2).navigate(action)
                     true
                 }
                 else -> false

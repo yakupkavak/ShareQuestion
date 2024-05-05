@@ -36,8 +36,8 @@ class LogInFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProvider(this).get(LogInViewModel::class.java)
 
+        viewModel = ViewModelProvider(this).get(LogInViewModel::class.java)
         val action = LogInFragmentDirections.actionLogInFragmentToFeedFragment()
 
         //show navigation with live data
