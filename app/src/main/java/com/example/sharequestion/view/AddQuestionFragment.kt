@@ -16,6 +16,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.navigation.Navigation
 import com.example.sharequestion.databinding.FragmentAddQuestionBinding
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.Firebase
@@ -30,6 +31,7 @@ class AddQuestionFragment : Fragment() {
     private lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
     private lateinit var permissionLauncher: ActivityResultLauncher<String>
     private lateinit var intentGallery : Intent
+    private lateinit var imgUri: Uri
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -94,11 +96,14 @@ class AddQuestionFragment : Fragment() {
                 }
             }
 
-        binding.addQuestionButtton.setOnClickListener {
+        binding.addQuestionButtton.setOnClickListener {view ->
+            imgUri.let {
+                uploadFile(view,it)
+            }
         }
 
         }
-    fun uploadFile(uri: Uri){
+    fun uploadFile(view: View,uri: Uri){
         val dbFire = Firebase.firestore
         val storageRef = Firebase.storage.reference
 
@@ -110,13 +115,26 @@ class AddQuestionFragment : Fragment() {
         imageRef.putFile(uri).addOnCompleteListener {
             println("upload successful")
             imageRef.downloadUrl.addOnCompleteListener{downloadUrl ->
-                println("download url ->" + downloadUrl.result )
+                //add question on firestorage
+                val question = hashMapOf(
+                    "imageUri" to downloadUrl.result.toString(),
+                    "comment" to binding.questionComment.text.toString()
+                )
+                
+                dbFire.collection("questions").add(question).addOnCompleteListener{
 
+                    //add question and change fragment
+                    val action = AddQuestionFragmentDirections.actionAddQuestionFragmentToFeedFragment()
+                    Navigation.findNavController(view).navigate(action)
+                }.addOnFailureListener {
+                    println(it.localizedMessage)
+                }
             }
         }.addOnFailureListener {
             println(it.localizedMessage)
         }
     }
+
     //implement launchers function for permission and intent
     fun registerLauncher(){
         activityResultLauncher = registerForActivityResult(ActivityResultContracts.
@@ -127,8 +145,7 @@ class AddQuestionFragment : Fragment() {
                 dataFromResult?.let {
                     val imageData = it.data
                     imageData?.let { uri ->  //uri is the data of the intent.
-                        println("The image uri -> "+uri)
-                        uploadFile(uri)
+                        imgUri = uri
                     }
                 }
             }

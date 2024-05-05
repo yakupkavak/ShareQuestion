@@ -76,5 +76,8 @@
         <action
             android:id="@+id/action_addQuestionFragment_to_logInFragment"
             app:destination="@id/logInFragment" />
+        <action
+            android:id="@+id/action_addQuestionFragment_to_feedFragment"
+            app:destination="@id/feedFragment" />
     </fragment>
 </navigation>

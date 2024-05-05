@@ -53,7 +53,6 @@ dependencies {
     implementation("com.google.firebase:firebase-auth:23.0.0")
     implementation("com.google.firebase:firebase-firestore:25.0.0")
     implementation("com.google.firebase:firebase-storage:21.0.0")
-
     //lifecycle
     implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
 
