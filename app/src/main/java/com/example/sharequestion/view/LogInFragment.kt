@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import com.example.sharequestion.R
 import com.example.sharequestion.databinding.FragmentLogInBinding
+import com.example.sharequestion.util.userMail
 import com.example.sharequestion.viewmodel.LogInViewModel
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
@@ -51,8 +52,8 @@ class LogInFragment : Fragment() {
             if (getInformation()){
                 viewModel.signIn(email!!,password!!){callback ->
                     if (callback){
+                        userMail.setMail(email!!)
                         Navigation.findNavController(it).navigate(action)
-
                     }
                     else{
                         Toast.makeText(requireContext(),"User couldn't found!",
@@ -65,6 +66,7 @@ class LogInFragment : Fragment() {
             if (getInformation()){
                 viewModel.signUp(email!!,password!!){callback ->
                     if (callback){
+                        userMail.setMail(email!!)
                         Navigation.findNavController(it).navigate(action)
                     }
                     else{

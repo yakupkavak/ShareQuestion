@@ -13,6 +13,7 @@ import androidx.navigation.Navigation
 import androidx.navigation.fragment.NavHostFragment
 import com.example.sharequestion.R
 import com.example.sharequestion.databinding.ActivityMainBinding
+import com.example.sharequestion.util.userMail
 import com.example.sharequestion.viewmodel.LogInViewModel
 
 class MainActivity : AppCompatActivity() {
@@ -141,6 +142,8 @@ class MainActivity : AppCompatActivity() {
         binding.bottomNavigationMenu.visibility = View.VISIBLE
     }
     fun hideNavigation(){
+        //clear singleton when log-out
+        userMail.setMail("")
         binding.bottomNavigationMenu.visibility = View.GONE
     }
 
