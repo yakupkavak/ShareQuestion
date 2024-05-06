@@ -19,10 +19,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.sharequestion.databinding.QuestionRowBinding
 import com.example.sharequestion.model.Question
 import com.example.sharequestion.util.downloadUrl
+import com.example.sharequestion.util.permission
 import com.example.sharequestion.view.AddQuestionFragment
 import com.google.android.material.snackbar.Snackbar
+import java.security.Permission
 
-class QuestionRowAdapter(val questionList: ArrayList<Question>): RecyclerView.Adapter<QuestionRowAdapter.QuestionViewHolder>() {
+class QuestionRowAdapter(val permission: permission,val questionList: ArrayList<Question>): RecyclerView.Adapter<QuestionRowAdapter.QuestionViewHolder>() {
     class QuestionViewHolder(val binding: QuestionRowBinding): RecyclerView.ViewHolder(binding.root)
 
     /*
@@ -58,7 +60,7 @@ class QuestionRowAdapter(val questionList: ArrayList<Question>): RecyclerView.Ad
         holder.binding.addImageComment.setOnClickListener {
             //save image
              println("question")
-            //askPermission(it)
+            permission.askPermission(it)
         }
 
         holder.binding.addComment.setOnClickListener {
