@@ -38,7 +38,6 @@ class ChangePasswordFragment : Fragment() {
         binding.changeButton.setOnClickListener {view->
             val credential = EmailAuthProvider
                 .getCredential(user?.email!!,binding.pastPassword.text.toString())
-
             user.reauthenticate(credential).addOnSuccessListener{
                 if (binding.newPassword.text.toString() == binding.newPasswordAgain.text.toString()){
                     val newPassword = binding.newPassword.text.toString()
@@ -57,19 +56,7 @@ class ChangePasswordFragment : Fragment() {
             }.addOnFailureListener {
                 Toast.makeText(requireContext(),"Wrong Password!",Toast.LENGTH_LONG).show()
             }
-
         }
-
-
-
-
-
-
-
-
-
-
-
     }
 
     override fun onDestroyView() {

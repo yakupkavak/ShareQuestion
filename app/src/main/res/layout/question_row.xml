@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:padding="15dp"
     android:orientation="vertical"
     android:gravity="center"
     android:layout_height="wrap_content">
@@ -32,10 +33,53 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
     </TextView>
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/questionRecyclerView"
+    <LinearLayout
         android:layout_width="wrap_content"
+        android:orientation="vertical"
         android:layout_height="wrap_content">
-    </androidx.recyclerview.widget.RecyclerView>
+        <TextView
+            android:padding="5dp"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:text="Show comments(0)"
+            android:id="@+id/show_comments_text">
+
+        </TextView>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/questionRecyclerView"
+            android:layout_width="wrap_content"
+            android:visibility="gone"
+            android:layout_height="wrap_content">
+        </androidx.recyclerview.widget.RecyclerView>
+    </LinearLayout>
+
+
+
+    <LinearLayout
+        android:layout_width="300dp"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_height="wrap_content">
+        <ImageButton
+            android:id="@+id/add_image_comment"
+            android:layout_width="45dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/addimage"
+            android:layout_height="45dp">
+        </ImageButton>
+        <EditText
+            android:id="@+id/question_user_comment"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2">
+        </EditText>
+        <ImageButton
+            android:id="@+id/add_comment"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@color/cardview_dark_background"
+            ></ImageButton>
+    </LinearLayout>
+
 
 </LinearLayout>

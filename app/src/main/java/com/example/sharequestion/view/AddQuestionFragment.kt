@@ -18,14 +18,14 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.navigation.Navigation
 import com.example.sharequestion.databinding.FragmentAddQuestionBinding
+import com.example.sharequestion.util.permission
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
-import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.storage
 import java.util.UUID
 
-class AddQuestionFragment : Fragment() {
+class AddQuestionFragment : Fragment(),permission {
     private var _binding: FragmentAddQuestionBinding? = null
     private val binding get() = _binding!!
     private lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
@@ -54,47 +54,8 @@ class AddQuestionFragment : Fragment() {
 
         binding.questionImage.setOnClickListener {
             //check sdk for media or external permission
-            if (Build.VERSION.SDK_INT > 32){
-
-                //the permission is granted
-                if (ContextCompat.checkSelfPermission(requireContext(),android.Manifest.
-                    permission.READ_MEDIA_IMAGES) == PackageManager.PERMISSION_GRANTED){
-
-                    activityResultLauncher.launch(intentGallery)
-                }
-
-                //request permission MEDIA_IMAGES
-                else{
-                    if (ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(),
-                            android.Manifest.permission.READ_MEDIA_IMAGES)){
-                        Snackbar.make(it,"Permission for gallery",Snackbar.LENGTH_LONG).
-                        setAction("Give Permission"){
-                            permissionLauncher.launch(android.Manifest.permission.READ_MEDIA_IMAGES)
-                        }.show()
-                    }else{
-                        permissionLauncher.launch(android.Manifest.permission.READ_MEDIA_IMAGES)
-                    } }
-            }
-            else{
-                //the permission is granted
-                if (ContextCompat.checkSelfPermission(requireContext(),android.Manifest.
-                    permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
-                    activityResultLauncher.launch(intentGallery)
-                }
-
-                //request permission EXTERNAL_STORAGE
-                else{
-                    if (ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(),
-                            android.Manifest.permission.READ_MEDIA_IMAGES)){
-                        Snackbar.make(it,"Permission for gallery",Snackbar.LENGTH_LONG).
-                        setAction("Give Permission"){
-                            permissionLauncher.launch(android.Manifest.permission.READ_EXTERNAL_STORAGE)
-                        }.show()
-                    }else{
-                        permissionLauncher.launch(android.Manifest.permission.READ_EXTERNAL_STORAGE)
-                    } }
-                }
-            }
+            askPermission(it)
+        }
 
         binding.addQuestionButtton.setOnClickListener {view ->
             imgUri.let {
@@ -103,6 +64,8 @@ class AddQuestionFragment : Fragment() {
         }
 
         }
+
+
     fun uploadFile(view: View,uri: Uri){
         val dbFire = Firebase.firestore
         val storageRef = Firebase.storage.reference
@@ -136,7 +99,59 @@ class AddQuestionFragment : Fragment() {
     }
 
     //implement launchers function for permission and intent
-    fun registerLauncher(){
+
+
+
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+    override fun askPermission(it:View){
+        if (Build.VERSION.SDK_INT > 32){
+
+            //the permission is granted
+            if (ContextCompat.checkSelfPermission(requireContext(),android.Manifest.
+                permission.READ_MEDIA_IMAGES) == PackageManager.PERMISSION_GRANTED){
+
+                activityResultLauncher.launch(intentGallery)
+            }
+
+            //request permission MEDIA_IMAGES
+            else{
+                if (ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(),
+                        android.Manifest.permission.READ_MEDIA_IMAGES)){
+                    Snackbar.make(it,"Permission for gallery",Snackbar.LENGTH_LONG).
+                    setAction("Give Permission"){
+                        permissionLauncher.launch(android.Manifest.permission.READ_MEDIA_IMAGES)
+                    }.show()
+                }else{
+                    permissionLauncher.launch(android.Manifest.permission.READ_MEDIA_IMAGES)
+                } }
+        }
+        else{
+            //the permission is granted
+            if (ContextCompat.checkSelfPermission(requireContext(),android.Manifest.
+                permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
+                activityResultLauncher.launch(intentGallery)
+            }
+
+            //request permission EXTERNAL_STORAGE
+            else{
+                if (ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(),
+                        android.Manifest.permission.READ_MEDIA_IMAGES)){
+                    Snackbar.make(it,"Permission for gallery",Snackbar.LENGTH_LONG).
+                    setAction("Give Permission"){
+                        permissionLauncher.launch(android.Manifest.permission.READ_EXTERNAL_STORAGE)
+                    }.show()
+                }else{
+                    permissionLauncher.launch(android.Manifest.permission.READ_EXTERNAL_STORAGE)
+                } }
+        }
+
+    }
+
+    override fun registerLauncher(){
         activityResultLauncher = registerForActivityResult(ActivityResultContracts.
         StartActivityForResult()){result->
             //check activity worked
@@ -162,13 +177,7 @@ class AddQuestionFragment : Fragment() {
                 //doesn't have permission
                 Toast.makeText(requireContext(),"Give Permission",Toast.LENGTH_LONG).show()
             }
-
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
 }
