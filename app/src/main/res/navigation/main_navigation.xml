@@ -46,6 +46,9 @@
         <action
             android:id="@+id/action_changePasswordFragment_to_logInFragment"
             app:destination="@id/logInFragment" />
+        <action
+            android:id="@+id/action_changePasswordFragment_to_addQuestionFragment"
+            app:destination="@id/addQuestionFragment" />
     </fragment>
     <fragment
         android:id="@+id/savedFragment"
@@ -61,6 +64,9 @@
         <action
             android:id="@+id/action_savedFragment_to_logInFragment"
             app:destination="@id/logInFragment" />
+        <action
+            android:id="@+id/action_savedFragment_to_addQuestionFragment"
+            app:destination="@id/addQuestionFragment" />
     </fragment>
     <fragment
         android:id="@+id/addQuestionFragment"

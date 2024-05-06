@@ -57,11 +57,7 @@ class FeedFragment : Fragment() {
                 binding.feedRecyclerView.layoutManager = LinearLayoutManager(requireContext())
                 binding.feedRecyclerView.adapter = adapter
             }
-
         }
-
-
-
     }
     suspend fun getDataFromFirebase():ArrayList<Question>{
         val questionArray = ArrayList<Question>()
