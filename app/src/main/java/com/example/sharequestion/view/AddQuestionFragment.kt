@@ -56,17 +56,14 @@ class AddQuestionFragment : Fragment(),permission {
             //check sdk for media or external permission
             askPermission(it)
         }
-
         binding.addQuestionButtton.setOnClickListener {view ->
             imgUri.let {
                 uploadFile(view,it)
             }
         }
-
-        }
-
-
+    }
     fun uploadFile(view: View,uri: Uri){
+        println(uri)
         val dbFire = Firebase.firestore
         val storageRef = Firebase.storage.reference
 
@@ -98,15 +95,14 @@ class AddQuestionFragment : Fragment(),permission {
         }
     }
 
-    //implement launchers function for permission and intent
-
-
 
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
+
+    //implement launchers function for permission and intent
     override fun askPermission(it:View){
         if (Build.VERSION.SDK_INT > 32){
 

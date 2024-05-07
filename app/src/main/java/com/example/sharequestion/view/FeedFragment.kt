@@ -58,6 +58,8 @@ class FeedFragment : Fragment() ,permission{
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         registerLauncher()
+        intentGallery = Intent(Intent.ACTION_PICK,MediaStore.Images.Media.
+        EXTERNAL_CONTENT_URI)
 
         fireDatabase = Firebase.firestore
         var myDownloadArray = ArrayList<Question>()
@@ -72,6 +74,7 @@ class FeedFragment : Fragment() ,permission{
             }
         }
     }
+
     suspend fun getDataFromFirebase():ArrayList<Question>{
         val questionArray = ArrayList<Question>()
         val dbRef = fireDatabase.collection("questions")
@@ -96,7 +99,6 @@ class FeedFragment : Fragment() ,permission{
             //the permission is granted
             if (ContextCompat.checkSelfPermission(requireContext(),android.Manifest.
                 permission.READ_MEDIA_IMAGES) == PackageManager.PERMISSION_GRANTED){
-
                 activityResultLauncher.launch(intentGallery)
             }
 
@@ -113,12 +115,12 @@ class FeedFragment : Fragment() ,permission{
                 } }
         }
         else{
+
             //the permission is granted
             if (ContextCompat.checkSelfPermission(requireContext(),android.Manifest.
                 permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
                 activityResultLauncher.launch(intentGallery)
             }
-
             //request permission EXTERNAL_STORAGE
             else{
                 if (ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(),
@@ -144,7 +146,7 @@ class FeedFragment : Fragment() ,permission{
                 dataFromResult?.let {
                     val imageData = it.data
                     imageData?.let { uri ->  //uri is the data of the intent.
-                        imgUri = uri
+                        adapter.updateUri(uri)
                     }
                 }
             }
