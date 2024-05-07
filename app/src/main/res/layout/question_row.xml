@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:padding="15dp"
     android:orientation="vertical"
@@ -60,25 +61,26 @@
         android:orientation="horizontal"
         android:gravity="center"
         android:layout_height="wrap_content">
+
         <ImageButton
             android:id="@+id/add_image_comment"
             android:layout_width="45dp"
+            android:layout_height="45dp"
             android:scaleType="fitCenter"
-            android:src="@drawable/addimage"
-            android:layout_height="45dp">
-        </ImageButton>
+            android:src="@drawable/addimage"></ImageButton>
         <EditText
             android:id="@+id/question_user_comment"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2">
         </EditText>
+
         <ImageButton
-            android:id="@+id/add_comment"
+            android:id="@+id/send_comment"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:src="@color/cardview_dark_background"
-            ></ImageButton>
+            android:background="#00FFFFFF"
+            android:src="@android:drawable/ic_menu_send"></ImageButton>
     </LinearLayout>
 
 

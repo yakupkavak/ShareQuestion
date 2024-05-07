@@ -25,7 +25,7 @@ import com.google.firebase.firestore.firestore
 import com.google.firebase.storage.storage
 import java.util.UUID
 
-class AddQuestionFragment : Fragment(),permission {
+class AddQuestionFragment : Fragment() {
     private var _binding: FragmentAddQuestionBinding? = null
     private val binding get() = _binding!!
     private lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
@@ -73,16 +73,17 @@ class AddQuestionFragment : Fragment(),permission {
 
         //put image to storage
         imageRef.putFile(uri).addOnCompleteListener {
-            println("upload successful")
+            println("koyulan görsel uri'i" + uri)
+
             imageRef.downloadUrl.addOnCompleteListener{downloadUrl ->
                 //add question on firestorage
                 val question = hashMapOf(
                     "imageUri" to downloadUrl.result.toString(),
                     "comment" to binding.questionComment.text.toString()
                 )
+                println("add question ->" + downloadUrl.result.toString())
                 
                 dbFire.collection("questions").add(question).addOnCompleteListener{
-
                     //add question and change fragment
                     val action = AddQuestionFragmentDirections.actionAddQuestionFragmentToFeedFragment()
                     Navigation.findNavController(view).navigate(action)
@@ -103,7 +104,7 @@ class AddQuestionFragment : Fragment(),permission {
     }
 
     //implement launchers function for permission and intent
-    override fun askPermission(it:View){
+    fun askPermission(it:View){
         if (Build.VERSION.SDK_INT > 32){
 
             //the permission is granted
@@ -147,7 +148,7 @@ class AddQuestionFragment : Fragment(),permission {
 
     }
 
-    override fun registerLauncher(){
+    fun registerLauncher(){
         activityResultLauncher = registerForActivityResult(ActivityResultContracts.
         StartActivityForResult()){result->
             //check activity worked

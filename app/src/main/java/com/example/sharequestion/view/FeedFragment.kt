@@ -19,22 +19,27 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.sharequestion.adapter.QuestionRowAdapter
 import com.example.sharequestion.databinding.FragmentFeedBinding
+import com.example.sharequestion.model.Comment
 import com.example.sharequestion.model.Question
 import com.example.sharequestion.util.permission
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.firestore
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.storage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
+import java.util.UUID
 
 class FeedFragment : Fragment() ,permission{
     private var _binding: FragmentFeedBinding? = null
     private val binding get() = _binding!!
     private lateinit var fireDatabase : FirebaseFirestore
+    private lateinit var fireStorage: FirebaseStorage
     private lateinit var adapter : QuestionRowAdapter
     private lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
     private lateinit var permissionLauncher: ActivityResultLauncher<String>
@@ -42,10 +47,7 @@ class FeedFragment : Fragment() ,permission{
     private lateinit var imgUri: Uri
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-
     }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
@@ -62,11 +64,19 @@ class FeedFragment : Fragment() ,permission{
         EXTERNAL_CONTENT_URI)
 
         fireDatabase = Firebase.firestore
+        fireStorage = Firebase.storage
         var myDownloadArray = ArrayList<Question>()
 
         //binding adapter with firebase
+        CoroutineScope(Dispatchers.Default).launch {
+            refreshFeed()
+        }
+
+
+    }
+    suspend fun refreshFeed(){
         CoroutineScope(Dispatchers.IO).launch {
-            myDownloadArray = getDataFromFirebase()
+            val myDownloadArray = getDataFromFirebase()
             adapter = QuestionRowAdapter(this@FeedFragment,myDownloadArray)
             withContext(Dispatchers.Main){
                 binding.feedRecyclerView.layoutManager = LinearLayoutManager(requireContext())
@@ -85,14 +95,43 @@ class FeedFragment : Fragment() ,permission{
                 data["comment"].toString(),
                 data["imageUri"].toString()))
         }
-
         return questionArray
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+
+    override fun addComment(comment:Comment){
+        fireDatabase
+        val storageRef = fireStorage.reference
+        //create unique uuid and image name.
+        val uuid = UUID.randomUUID().toString()
+        val imageRef = storageRef.child("commentsImages/$uuid.jpg")
+
+        //add image to firestorage
+        imageRef.putFile(comment.commentUri).addOnCompleteListener {
+
+            //get url and text to firebase
+            imageRef.downloadUrl.addOnCompleteListener{commentUrl->
+                val userComment = hashMapOf(
+                    "commentUrl" to commentUrl.result.toString(),
+                    "userComment" to comment.commentText,
+                )
+
+                //add it to question id location
+                fireDatabase.document("questions/${comment.mainDocumentId}")
+                    .collection("comments")
+                    .add(userComment)
+                    .addOnSuccessListener {
+                        //refresh the feed screen with new comment
+                        CoroutineScope(Dispatchers.Default).launch {
+                            refreshFeed()
+                        }
+                    }.addOnFailureListener {
+                        println(it.localizedMessage)
+                    }
+            }
+        }
     }
+
     override fun askPermission(it:View){
         if (Build.VERSION.SDK_INT > 32){
 
@@ -166,6 +205,10 @@ class FeedFragment : Fragment() ,permission{
                 Toast.makeText(requireContext(),"Give Permission", Toast.LENGTH_LONG).show()
             }
         }
+    }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
 }

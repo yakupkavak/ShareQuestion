@@ -17,6 +17,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.sharequestion.databinding.QuestionRowBinding
+import com.example.sharequestion.model.Comment
 import com.example.sharequestion.model.Question
 import com.example.sharequestion.util.downloadUrl
 import com.example.sharequestion.util.permission
@@ -24,7 +25,8 @@ import com.example.sharequestion.view.AddQuestionFragment
 import com.google.android.material.snackbar.Snackbar
 import java.security.Permission
 
-class QuestionRowAdapter(val permission: permission,val questionList: ArrayList<Question>): RecyclerView.Adapter<QuestionRowAdapter.QuestionViewHolder>() {
+class QuestionRowAdapter(val permission: permission,val questionList: ArrayList<Question>):
+    RecyclerView.Adapter<QuestionRowAdapter.QuestionViewHolder>() {
     class QuestionViewHolder(val binding: QuestionRowBinding): RecyclerView.ViewHolder(binding.root)
 
    var imgUri = Uri.EMPTY
@@ -39,22 +41,27 @@ class QuestionRowAdapter(val permission: permission,val questionList: ArrayList<
     }
 
     override fun onBindViewHolder(holder: QuestionViewHolder, position: Int) {
-
         holder.binding.questionImageRow.downloadUrl(questionList[position].questionUri)
         holder.binding.questionTextRow.text = questionList[position].questionText
-
-        holder.binding.addImageComment.setOnClickListener {
-            //save image
-            permission.askPermission(it)
-        }
+        //save comment
         holder.binding.questionSaveImg.setOnClickListener {
             println("my selected uri $imgUri")
         }
 
-        holder.binding.addComment.setOnClickListener {
-            val commentText = holder.binding.questionUserComment.text.toString()
-
+        //select comment image
+        holder.binding.addImageComment.setOnClickListener {
+            permission.askPermission(it)
         }
+
+        //send comment
+        holder.binding.sendComment.setOnClickListener {
+            val commentText = holder.binding.questionUserComment.text.toString()
+            val commentImgUri = imgUri
+            val questionID = questionList[position].questionId
+            val userComment = Comment(questionID,commentText,commentImgUri)
+            permission.addComment(userComment)
+        }
+
         //make visible comments
         holder.binding.showCommentsText.setOnClickListener {
             holder.binding.questionRecyclerView.visibility = View.VISIBLE
