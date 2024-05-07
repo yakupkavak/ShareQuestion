@@ -3,30 +3,25 @@
 
     <item
         android:id="@+id/main_screen_menu"
-        android:icon="@color/cardview_light_background"
-        android:title="Main Screen">
-    </item>
+        android:icon="@android:drawable/ic_menu_agenda"
+        android:title="Main Screen"></item>
     <item
         android:id="@+id/add_question_menu"
-        android:icon="@color/cardview_light_background"
-        android:title="Add Question">
-    </item>
+        android:icon="@android:drawable/ic_menu_add"
+        android:title="Add Question"></item>
     <item
         android:id="@+id/change_password_menu"
-        android:icon="@color/cardview_light_background"
 
-        android:title="Change Password">
-    </item>
+        android:icon="@android:drawable/ic_lock_idle_lock"
+        android:title="Change Password"></item>
     <item
         android:id="@+id/saved_menu"
-        android:icon="@color/cardview_light_background"
 
-        android:title="Saved Questions">
-    </item>
+        android:icon="@android:drawable/ic_input_get"
+        android:title="Saved Questions"></item>
     <item
         android:id="@+id/logout_menu"
-        android:icon="@color/cardview_light_background"
-        android:title="Log Out">
-    </item>
+        android:icon="@android:drawable/ic_menu_close_clear_cancel"
+        android:title="Log Out"></item>
 
 </menu>

@@ -63,7 +63,7 @@ class AddQuestionFragment : Fragment() {
         }
     }
     fun uploadFile(view: View,uri: Uri){
-        println(uri)
+
         val dbFire = Firebase.firestore
         val storageRef = Firebase.storage.reference
 
@@ -73,7 +73,6 @@ class AddQuestionFragment : Fragment() {
 
         //put image to storage
         imageRef.putFile(uri).addOnCompleteListener {
-            println("koyulan görsel uri'i" + uri)
 
             imageRef.downloadUrl.addOnCompleteListener{downloadUrl ->
                 //add question on firestorage
@@ -81,8 +80,6 @@ class AddQuestionFragment : Fragment() {
                     "imageUri" to downloadUrl.result.toString(),
                     "comment" to binding.questionComment.text.toString()
                 )
-                println("add question ->" + downloadUrl.result.toString())
-                
                 dbFire.collection("questions").add(question).addOnCompleteListener{
                     //add question and change fragment
                     val action = AddQuestionFragmentDirections.actionAddQuestionFragmentToFeedFragment()

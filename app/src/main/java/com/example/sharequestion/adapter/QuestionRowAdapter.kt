@@ -15,6 +15,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.sharequestion.databinding.QuestionRowBinding
 import com.example.sharequestion.model.Comment
@@ -23,13 +24,20 @@ import com.example.sharequestion.util.downloadUrl
 import com.example.sharequestion.util.permission
 import com.example.sharequestion.view.AddQuestionFragment
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.security.Permission
 
-class QuestionRowAdapter(val permission: permission,val questionList: ArrayList<Question>):
+class QuestionRowAdapter(val context: Context,val permission: permission,val questionList: ArrayList<Question>):
     RecyclerView.Adapter<QuestionRowAdapter.QuestionViewHolder>() {
     class QuestionViewHolder(val binding: QuestionRowBinding): RecyclerView.ViewHolder(binding.root)
 
    var imgUri = Uri.EMPTY
+
+    //for close and open comments
+    var checkNum = 0
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QuestionViewHolder {
         val binding = QuestionRowBinding.inflate(LayoutInflater.from(parent.context))
@@ -43,10 +51,13 @@ class QuestionRowAdapter(val permission: permission,val questionList: ArrayList<
     override fun onBindViewHolder(holder: QuestionViewHolder, position: Int) {
         holder.binding.questionImageRow.downloadUrl(questionList[position].questionUri)
         holder.binding.questionTextRow.text = questionList[position].questionText
+
         //save comment
-        holder.binding.questionSaveImg.setOnClickListener {
-            println("my selected uri $imgUri")
+         holder.binding.questionSaveImg.setOnClickListener {
+            TODO("SAVE TO SQL DATABASE")
         }
+
+
 
         //select comment image
         holder.binding.addImageComment.setOnClickListener {
@@ -58,17 +69,43 @@ class QuestionRowAdapter(val permission: permission,val questionList: ArrayList<
             val commentText = holder.binding.questionUserComment.text.toString()
             val commentImgUri = imgUri
             val questionID = questionList[position].questionId
-            val userComment = Comment(questionID,commentText,commentImgUri)
-            permission.addComment(userComment)
+            val userComment = Comment(questionID,commentText,commentImgUri.toString())
+            permission.addComment(userComment,imgUri)
         }
 
-        //make visible comments
+
+        //binding the comment recycler view
+        CoroutineScope(Dispatchers.IO).launch {
+            val myCommentArray = permission.getComments(questionList[position].questionId)
+            val commentAdapter= CommentRowAdapter(myCommentArray)
+            withContext(Dispatchers.Main){
+                holder.binding.commentRecyclerView.layoutManager = LinearLayoutManager(context)
+                holder.binding.commentRecyclerView.adapter = commentAdapter
+                if (myCommentArray.isEmpty()){
+                    holder.binding.showCommentsText.visibility = View.GONE
+                }
+                else{
+                    holder.binding.showCommentsText.visibility = View.VISIBLE
+                }
+            }
+        }
+
+        holder.binding.commentRecyclerView.visibility = View.GONE
+        //make visible and invisible comments
         holder.binding.showCommentsText.setOnClickListener {
-            holder.binding.questionRecyclerView.visibility = View.VISIBLE
+            if (checkNum == 0){
+                holder.binding.commentRecyclerView.visibility = View.VISIBLE
+                holder.binding.showCommentsText.text = "Hide comments"
+                checkNum = 1
+            }
+            else{
+                holder.binding.commentRecyclerView.visibility = View.GONE
+                holder.binding.showCommentsText.text = "Show comments"
+                checkNum = 0
+            }
         }
-
-
     }
+
     fun updateUri(uri : Uri){
         println("uri updated to" + uri)
         imgUri = uri

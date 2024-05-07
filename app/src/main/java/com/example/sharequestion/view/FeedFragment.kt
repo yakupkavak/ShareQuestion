@@ -65,7 +65,6 @@ class FeedFragment : Fragment() ,permission{
 
         fireDatabase = Firebase.firestore
         fireStorage = Firebase.storage
-        var myDownloadArray = ArrayList<Question>()
 
         //binding adapter with firebase
         CoroutineScope(Dispatchers.Default).launch {
@@ -77,7 +76,7 @@ class FeedFragment : Fragment() ,permission{
     suspend fun refreshFeed(){
         CoroutineScope(Dispatchers.IO).launch {
             val myDownloadArray = getDataFromFirebase()
-            adapter = QuestionRowAdapter(this@FeedFragment,myDownloadArray)
+            adapter = QuestionRowAdapter(requireContext(),this@FeedFragment,myDownloadArray)
             withContext(Dispatchers.Main){
                 binding.feedRecyclerView.layoutManager = LinearLayoutManager(requireContext())
                 binding.feedRecyclerView.adapter = adapter
@@ -98,23 +97,22 @@ class FeedFragment : Fragment() ,permission{
         return questionArray
     }
 
-
-    override fun addComment(comment:Comment){
+    override fun addComment(comment:Comment,uri:Uri){
         fireDatabase
         val storageRef = fireStorage.reference
+
         //create unique uuid and image name.
         val uuid = UUID.randomUUID().toString()
         val imageRef = storageRef.child("commentsImages/$uuid.jpg")
 
         //add image to firestorage
-        imageRef.putFile(comment.commentUri).addOnCompleteListener {
-
+        imageRef.putFile(uri).addOnCompleteListener {
             //get url and text to firebase
             imageRef.downloadUrl.addOnCompleteListener{commentUrl->
                 val userComment = hashMapOf(
                     "commentUrl" to commentUrl.result.toString(),
                     "userComment" to comment.commentText,
-                )
+                    )
 
                 //add it to question id location
                 fireDatabase.document("questions/${comment.mainDocumentId}")
@@ -130,6 +128,22 @@ class FeedFragment : Fragment() ,permission{
                     }
             }
         }
+    }
+
+    override suspend fun getComments(commnetId: String): ArrayList<Comment> {
+        val commentArray = ArrayList<Comment>()
+        val dbRef = fireDatabase.document("questions/${commnetId}")
+            .collection("comments")
+        val dbList = dbRef.get().await()
+
+        for (i in dbList){
+            val data = i.data
+            commentArray.add(Comment
+                (commnetId,
+                data["userComment"].toString(),
+                data["commentUrl"].toString()))
+        }
+        return commentArray
     }
 
     override fun askPermission(it:View){
@@ -174,7 +188,6 @@ class FeedFragment : Fragment() ,permission{
         }
 
     }
-
     override fun registerLauncher(){
         activityResultLauncher = registerForActivityResult(
             ActivityResultContracts.
