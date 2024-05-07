@@ -57,8 +57,6 @@ class QuestionRowAdapter(val context: Context,val permission: permission,val que
             TODO("SAVE TO SQL DATABASE")
         }
 
-
-
         //select comment image
         holder.binding.addImageComment.setOnClickListener {
             permission.askPermission(it)
@@ -72,7 +70,6 @@ class QuestionRowAdapter(val context: Context,val permission: permission,val que
             val userComment = Comment(questionID,commentText,commentImgUri.toString())
             permission.addComment(userComment,imgUri)
         }
-
 
         //binding the comment recycler view
         CoroutineScope(Dispatchers.IO).launch {
@@ -90,8 +87,8 @@ class QuestionRowAdapter(val context: Context,val permission: permission,val que
             }
         }
 
-        holder.binding.commentRecyclerView.visibility = View.GONE
         //make visible and invisible comments
+        holder.binding.commentRecyclerView.visibility = View.GONE
         holder.binding.showCommentsText.setOnClickListener {
             if (checkNum == 0){
                 holder.binding.commentRecyclerView.visibility = View.VISIBLE
@@ -107,7 +104,6 @@ class QuestionRowAdapter(val context: Context,val permission: permission,val que
     }
 
     fun updateUri(uri : Uri){
-        println("uri updated to" + uri)
         imgUri = uri
     }
 

@@ -6,7 +6,12 @@ import com.squareup.picasso.Picasso
 fun ImageView.downloadUrl(url:String){
 
     //adding url to imageView
-    Picasso.get().load(url).into(this)
+    if (url.isEmpty()){
+
+    }
+    else{
+        Picasso.get().load(url).into(this)
+    }
 }
 object userMail{
     var userMail : String? = null

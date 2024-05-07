@@ -1,6 +1,7 @@
 package com.example.sharequestion.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
@@ -24,7 +25,14 @@ class CommentRowAdapter(val commentList:ArrayList<Comment>):
     }
 
     override fun onBindViewHolder(holder: CommmentViewHolder, position: Int) {
-        holder.binding.answerImage.downloadUrl(commentList[position].commentUri.toString())
-        holder.binding.answerText.text = commentList[position].commentText
+        if (commentList[position].commentUri == ""){
+            holder.binding.answerImage.visibility = View.GONE
+            holder.binding.answerText.text = commentList[position].commentText
+        }
+        else{
+            holder.binding.answerImage.downloadUrl(commentList[position].commentUri.toString())
+            holder.binding.answerText.text = commentList[position].commentText
+        }
+
     }
 }

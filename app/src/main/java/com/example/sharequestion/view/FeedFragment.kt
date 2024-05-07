@@ -98,36 +98,57 @@ class FeedFragment : Fragment() ,permission{
     }
 
     override fun addComment(comment:Comment,uri:Uri){
+        //uri boş geldi empty
         fireDatabase
         val storageRef = fireStorage.reference
 
         //create unique uuid and image name.
         val uuid = UUID.randomUUID().toString()
         val imageRef = storageRef.child("commentsImages/$uuid.jpg")
+        if (uri == Uri.EMPTY){
+            val userComment = hashMapOf(
+                "commentUrl" to "",
+                "userComment" to comment.commentText,
+            )
 
-        //add image to firestorage
-        imageRef.putFile(uri).addOnCompleteListener {
-            //get url and text to firebase
-            imageRef.downloadUrl.addOnCompleteListener{commentUrl->
-                val userComment = hashMapOf(
-                    "commentUrl" to commentUrl.result.toString(),
-                    "userComment" to comment.commentText,
+            //add it to question id location
+            fireDatabase.document("questions/${comment.mainDocumentId}")
+                .collection("comments")
+                .add(userComment)
+                .addOnSuccessListener {
+                    //refresh the feed screen with new comment
+                    CoroutineScope(Dispatchers.Default).launch {
+                        refreshFeed()
+                    }
+                }.addOnFailureListener {
+                    println(it.localizedMessage)
+                }
+        }
+        else{
+            imageRef.putFile(uri).addOnCompleteListener {
+                //get url and text to firebase
+                imageRef.downloadUrl.addOnCompleteListener{commentUrl->
+                    val userComment = hashMapOf(
+                        "commentUrl" to commentUrl.result.toString(),
+                        "userComment" to comment.commentText,
                     )
 
-                //add it to question id location
-                fireDatabase.document("questions/${comment.mainDocumentId}")
-                    .collection("comments")
-                    .add(userComment)
-                    .addOnSuccessListener {
-                        //refresh the feed screen with new comment
-                        CoroutineScope(Dispatchers.Default).launch {
-                            refreshFeed()
+                    //add it to question id location
+                    fireDatabase.document("questions/${comment.mainDocumentId}")
+                        .collection("comments")
+                        .add(userComment)
+                        .addOnSuccessListener {
+                            //refresh the feed screen with new comment
+                            CoroutineScope(Dispatchers.Default).launch {
+                                refreshFeed()
+                            }
+                        }.addOnFailureListener {
+                            println(it.localizedMessage)
                         }
-                    }.addOnFailureListener {
-                        println(it.localizedMessage)
-                    }
+                }
             }
         }
+        //add image to firestorage
     }
 
     override suspend fun getComments(commnetId: String): ArrayList<Comment> {
