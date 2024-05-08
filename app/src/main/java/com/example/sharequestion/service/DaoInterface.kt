@@ -15,9 +15,20 @@ interface DaoInterface {
     @Query("SELECT * FROM Comments WHERE mainDocumentId = :mainDocId ")
     fun getAllComments(mainDocId : String): List<Comment>
 
-    @Insert(entity = Question::class)
-    fun insertQuestions(vararg questions: Question)
+    @Query("DELETE FROM Questions")
+    fun deleteAllQuestions()
+
+    @Query("DELETE FROM Comments")
+    fun deleteAllComments()
+
+    @Query("SELECT * FROM Questions WHERE questionId = :checkId")
+    fun checkQuestion(checkId: String): Question?
+
     @Insert
-    fun insertComments(vararg comments: Comment)
+    fun insertQuestion(vararg questions: Question)
+    @Insert
+    fun insertComment(vararg comments: Comment)
+
+
 
 }

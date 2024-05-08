@@ -82,12 +82,7 @@ class FeedFragment : Fragment() ,permission{
                 binding.feedRecyclerView.layoutManager = LinearLayoutManager(requireContext())
                 binding.feedRecyclerView.adapter = adapter
             }
-            uploadDao(myDownloadArray)
         }
-    }
-    fun uploadDao(questions: ArrayList<Question>){
-        val dao = QuestionDatabase(requireContext()).questionDao()
-        dao.insertQuestions(*questions.toTypedArray())
     }
 
     //get data from question collection
@@ -102,6 +97,25 @@ class FeedFragment : Fragment() ,permission{
                 data["imageUri"].toString()))
         }
         return questionArray
+    }
+
+
+    //add question to Dao
+    override fun uploadQuestion(question: Question){
+        CoroutineScope(Dispatchers.IO).launch {
+            val dao = QuestionDatabase(requireContext()).questionDao()
+            val checkQuestion = dao.checkQuestion(question.questionId)
+            if (checkQuestion == null){
+                dao.insertQuestion(question)
+                val commentList = getComments(question.questionId)
+                dao.insertComment(*commentList.toTypedArray())
+            }
+            else{
+                withContext(Dispatchers.Main){
+                    Toast.makeText(requireContext(),"It's already saved!",Toast.LENGTH_LONG).show()
+                }
+            }
+        }
     }
 
     //add comment to using documentId

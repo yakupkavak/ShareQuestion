@@ -43,7 +43,7 @@ class QuestionRowAdapter(val context: Context,val permission: permission,val que
 
         //save comment
          holder.binding.questionSaveImg.setOnClickListener {
-
+            permission.uploadQuestion(questionList[position])
         }
 
         //select comment image

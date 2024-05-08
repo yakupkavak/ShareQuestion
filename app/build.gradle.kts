@@ -50,6 +50,7 @@ dependencies {
     implementation("androidx.room:room-runtime:$room_version")
     annotationProcessor("androidx.room:room-compiler:$room_version")
     implementation("androidx.room:room-ktx:$room_version")
+    kapt("androidx.room:room-compiler:$room_version")
 
     //Navigation
     implementation("androidx.navigation:navigation-fragment-ktx:$nav_version")
@@ -60,7 +61,8 @@ dependencies {
     implementation("com.google.firebase:firebase-auth:23.0.0")
     implementation("com.google.firebase:firebase-firestore:25.0.0")
     implementation("com.google.firebase:firebase-storage:21.0.0")
-    kapt("androidx.room:room-compiler:$room_version")
+
+
 
     //lifecycle
     implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
