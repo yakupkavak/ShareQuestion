@@ -38,12 +38,13 @@ class SavedFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        //get all questions from dao
         CoroutineScope(Dispatchers.IO).launch {
             val dao = QuestionDatabase(requireContext()).questionDao()
             val questionList = dao.getAllQuestions()
             val arrayQuestion = ArrayList<Question>(questionList)
             withContext(Dispatchers.Main){
-                val adapter = SavedQuestionAdapter(arrayQuestion)
+                val adapter = SavedQuestionAdapter(requireContext(),arrayQuestion)
                 binding.savedRecyclerView.layoutManager = LinearLayoutManager(requireContext())
                 binding.savedRecyclerView.adapter = adapter
             }

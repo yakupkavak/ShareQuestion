@@ -80,6 +80,7 @@ class QuestionRowAdapter(val context: Context,val permission: permission,val que
 
         //make visible and invisible comments
         holder.binding.commentRecyclerView.visibility = View.GONE
+
         holder.binding.showCommentsText.setOnClickListener {
             if (checkNum == 0){
                 holder.binding.commentRecyclerView.visibility = View.VISIBLE

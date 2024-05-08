@@ -1,11 +1,14 @@
 package com.example.sharequestion.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.example.sharequestion.databinding.CommentRowBinding
 import com.example.sharequestion.model.Comment
+import com.example.sharequestion.util.convertToBitmap
+import com.example.sharequestion.util.downloadUrl
 
 class SavedCommentAdapter(val commentList : ArrayList<Comment>):Adapter<SavedCommentAdapter.SavedCommentHolder>() {
 
@@ -21,7 +24,18 @@ class SavedCommentAdapter(val commentList : ArrayList<Comment>):Adapter<SavedCom
     }
 
     override fun onBindViewHolder(holder: SavedCommentHolder, position: Int) {
-
+        if (commentList[position].commentUri == ""){
+            holder.binding.answerImage.visibility = View.GONE
+            holder.binding.answerText.text = commentList[position].commentText
+        }
+        else{
+            /* There is an problem
+            holder.binding.answerImage.setImageBitmap(commentList[position].commentUri.
+            convertToBitmap())
+             */
+            holder.binding.answerImage.visibility = View.GONE
+            holder.binding.answerText.text = commentList[position].commentText
+        }
     }
 
 }

@@ -106,17 +106,25 @@ class FeedFragment : Fragment() ,permission{
         CoroutineScope(Dispatchers.IO).launch {
             val dao = QuestionDatabase(requireContext()).questionDao()
             val checkQuestion = dao.checkQuestion(question.questionId)
-            if (checkQuestion == null){
 
+            //check is it already saved
+            if (checkQuestion == null){
                 //convert google storage url to bitmap where question and comment images.
+                println("kaydedilmeye çalışılan uri -> " + question.questionUri)
                 val bitmap = question.questionUri.convertBitmap()
                 val newQuestion = Question(question.questionId,question.questionText,bitmap)
                 dao.insertQuestion(newQuestion)
 
                 val commentList = getComments(question.questionId)
                 val emptyCommentList = ArrayList<Comment>()
+                var newBitmap = ""
                 for (i in commentList){
-                    val newBitmap = i.commentUri.convertBitmap()
+                    if (i.commentUri == ""){
+                        newBitmap = ""
+                    }
+                    else{
+                        newBitmap = i.commentUri.convertBitmap()
+                    }
                     val newComment = Comment(i.mainDocumentId,i.commentText,newBitmap)
                     emptyCommentList.add(newComment)
                 }

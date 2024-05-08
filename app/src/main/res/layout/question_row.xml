@@ -59,6 +59,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/question_row_linear"
         android:layout_width="300dp"
         android:orientation="horizontal"
         android:gravity="center"
