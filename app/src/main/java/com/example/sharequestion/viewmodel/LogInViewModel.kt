@@ -16,10 +16,10 @@ class LogInViewModel(application: Application) : BaseViewModel(application) {
     //to show bottom navigation bar created logInSuccess object.
     val logInSuccess = MutableLiveData<Boolean>()
 
+
     //user sign up with auth
     fun signUp(email : String, password: String, callback : (Boolean)-> Unit){
         auth = Firebase.auth
-
         //control the it it worked or not with callback
         auth.createUserWithEmailAndPassword(email,password).addOnCompleteListener {task ->
             if (task.isSuccessful){
@@ -32,7 +32,6 @@ class LogInViewModel(application: Application) : BaseViewModel(application) {
             callback(false)
             logInSuccess.value = false
         }
-
     }
 
     fun signIn(email : String, password: String, callback : (Boolean)-> Unit){

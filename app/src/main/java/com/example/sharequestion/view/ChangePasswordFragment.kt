@@ -36,14 +36,19 @@ class ChangePasswordFragment : Fragment() {
         val user = firebaseAuth.currentUser
 
         binding.changeButton.setOnClickListener {view->
+
+            //used reauthenticate to control
             val credential = EmailAuthProvider
                 .getCredential(user?.email!!,binding.pastPassword.text.toString())
             user.reauthenticate(credential).addOnSuccessListener{
+
                 if (binding.newPassword.text.toString() == binding.newPasswordAgain.text.toString()){
                     val newPassword = binding.newPassword.text.toString()
-                    user!!.updatePassword(newPassword).addOnSuccessListener {
+                    user!!.updatePassword(newPassword)
+                        .addOnSuccessListener {
                         Toast.makeText(requireContext(),"Password Changed",Toast.LENGTH_LONG).show()
-                    }.addOnFailureListener {
+                    }
+                        .addOnFailureListener {
                         Toast.makeText(requireContext(),"There is an error.",Toast.LENGTH_LONG).show()
                     }
 

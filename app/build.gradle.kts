@@ -53,12 +53,12 @@ dependencies {
     implementation("com.google.firebase:firebase-auth:23.0.0")
     implementation("com.google.firebase:firebase-firestore:25.0.0")
     implementation("com.google.firebase:firebase-storage:21.0.0")
+
     //lifecycle
     implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
 
     //picasso
     implementation("com.squareup.picasso:picasso:2.8")
-
 
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.appcompat:appcompat:1.6.1")

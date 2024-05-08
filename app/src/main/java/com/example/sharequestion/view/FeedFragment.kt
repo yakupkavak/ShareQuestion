@@ -71,8 +71,8 @@ class FeedFragment : Fragment() ,permission{
             refreshFeed()
         }
 
-
     }
+    //refresh the recyclerView with firebase
     suspend fun refreshFeed(){
         CoroutineScope(Dispatchers.IO).launch {
             val myDownloadArray = getDataFromFirebase()
@@ -84,6 +84,7 @@ class FeedFragment : Fragment() ,permission{
         }
     }
 
+    //get data from question collection
     suspend fun getDataFromFirebase():ArrayList<Question>{
         val questionArray = ArrayList<Question>()
         val dbRef = fireDatabase.collection("questions")
@@ -97,6 +98,7 @@ class FeedFragment : Fragment() ,permission{
         return questionArray
     }
 
+    //add comment to using documentId
     override fun addComment(comment:Comment,uri:Uri){
         //uri boş geldi empty
         fireDatabase
@@ -151,6 +153,7 @@ class FeedFragment : Fragment() ,permission{
         //add image to firestorage
     }
 
+    //get comment by documentId
     override suspend fun getComments(commnetId: String): ArrayList<Comment> {
         val commentArray = ArrayList<Comment>()
         val dbRef = fireDatabase.document("questions/${commnetId}")

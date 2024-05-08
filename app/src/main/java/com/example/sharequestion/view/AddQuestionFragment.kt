@@ -65,6 +65,8 @@ class AddQuestionFragment : Fragment() {
             }
         }
     }
+
+    //add question function
     fun uploadFile(view: View,uri: Uri){
         val dbFire = Firebase.firestore
         val storageRef = Firebase.storage.reference
@@ -93,6 +95,7 @@ class AddQuestionFragment : Fragment() {
             println(it.localizedMessage)
         }
     }
+
     //implement launchers function for permission and intent
     fun askPermission(it:View){
         if (Build.VERSION.SDK_INT > 32){
