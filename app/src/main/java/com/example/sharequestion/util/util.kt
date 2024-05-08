@@ -21,18 +21,25 @@ fun ImageView.downloadUrl(url:String){
 }
 
 fun String.convertBitmap():String{
-    val client = OkHttpClient()
-    val request = Request.Builder().url(this).build()
-    client.newCall(request).execute().use { response ->
-        if (response.isSuccessful){
-            response.body?.byteStream()?.let {
-                return BitmapFactory.decodeStream(it).toString()
-            }
-        }
-
-
+    val myString = this
+    if (myString == ""){
+        return ""
     }
-    return ""
+    else{
+        val client = OkHttpClient()
+        val request = Request.Builder().url(this).build()
+        client.newCall(request).execute().use { response ->
+            if (response.isSuccessful){
+                response.body?.byteStream()?.let {
+                    return BitmapFactory.decodeStream(it).toString()
+                }
+            }
+
+
+        }
+        return ""
+    }
+
 }
 
 fun ImageButton.setImgCorrect(){

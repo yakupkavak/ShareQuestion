@@ -108,13 +108,19 @@ class FeedFragment : Fragment() ,permission{
             val checkQuestion = dao.checkQuestion(question.questionId)
             if (checkQuestion == null){
 
-                //convert google storage url to bitmap
+                //convert google storage url to bitmap where question and comment images.
                 val bitmap = question.questionUri.convertBitmap()
                 val newQuestion = Question(question.questionId,question.questionText,bitmap)
                 dao.insertQuestion(newQuestion)
-                
+
                 val commentList = getComments(question.questionId)
-                dao.insertComment(*commentList.toTypedArray())
+                val emptyCommentList = ArrayList<Comment>()
+                for (i in commentList){
+                    val newBitmap = i.commentUri.convertBitmap()
+                    val newComment = Comment(i.mainDocumentId,i.commentText,newBitmap)
+                    emptyCommentList.add(newComment)
+                }
+                dao.insertComment(*emptyCommentList.toTypedArray())
             }
             else{
                 withContext(Dispatchers.Main){
