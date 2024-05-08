@@ -70,7 +70,9 @@ class AddQuestionFragment : Fragment() {
             }
 
         }
+
     }
+
 
     //add question function
     fun uploadFile(view: View,uri: Uri){

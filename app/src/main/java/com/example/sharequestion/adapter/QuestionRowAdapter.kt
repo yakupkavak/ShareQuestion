@@ -65,6 +65,7 @@ class QuestionRowAdapter(val context: Context,val permission: permission,val que
         CoroutineScope(Dispatchers.IO).launch {
             val myCommentArray = permission.getComments(questionList[position].questionId)
             val commentAdapter= CommentRowAdapter(myCommentArray)
+
             withContext(Dispatchers.Main){
                 holder.binding.commentRecyclerView.layoutManager = LinearLayoutManager(context)
                 holder.binding.commentRecyclerView.adapter = commentAdapter

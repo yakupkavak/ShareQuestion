@@ -22,6 +22,7 @@ import com.example.sharequestion.databinding.FragmentFeedBinding
 import com.example.sharequestion.model.Comment
 import com.example.sharequestion.model.Question
 import com.example.sharequestion.service.QuestionDatabase
+import com.example.sharequestion.util.convertBitmap
 import com.example.sharequestion.util.permission
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.Firebase
@@ -106,7 +107,12 @@ class FeedFragment : Fragment() ,permission{
             val dao = QuestionDatabase(requireContext()).questionDao()
             val checkQuestion = dao.checkQuestion(question.questionId)
             if (checkQuestion == null){
-                dao.insertQuestion(question)
+
+                //convert google storage url to bitmap
+                val bitmap = question.questionUri.convertBitmap()
+                val newQuestion = Question(question.questionId,question.questionText,bitmap)
+                dao.insertQuestion(newQuestion)
+                
                 val commentList = getComments(question.questionId)
                 dao.insertComment(*commentList.toTypedArray())
             }
