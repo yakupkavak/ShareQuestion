@@ -1,36 +1,23 @@
 package com.example.sharequestion.adapter
 
-import android.app.Activity
 import android.content.Context
-import android.content.Intent
-import android.content.pm.PackageManager
 import android.net.Uri
-import android.os.Build
-import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.sharequestion.R
 import com.example.sharequestion.databinding.QuestionRowBinding
 import com.example.sharequestion.model.Comment
 import com.example.sharequestion.model.Question
+import com.example.sharequestion.service.QuestionDatabase
 import com.example.sharequestion.util.downloadUrl
 import com.example.sharequestion.util.permission
 import com.example.sharequestion.util.setImgCorrect
-import com.example.sharequestion.view.AddQuestionFragment
-import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.security.Permission
 
 class QuestionRowAdapter(val context: Context,val permission: permission,val questionList: ArrayList<Question>):
     RecyclerView.Adapter<QuestionRowAdapter.QuestionViewHolder>() {
@@ -56,7 +43,7 @@ class QuestionRowAdapter(val context: Context,val permission: permission,val que
 
         //save comment
          holder.binding.questionSaveImg.setOnClickListener {
-            TODO("SAVE TO SQL DATABASE")
+
         }
 
         //select comment image

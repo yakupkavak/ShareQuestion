@@ -21,6 +21,7 @@ import com.example.sharequestion.adapter.QuestionRowAdapter
 import com.example.sharequestion.databinding.FragmentFeedBinding
 import com.example.sharequestion.model.Comment
 import com.example.sharequestion.model.Question
+import com.example.sharequestion.service.QuestionDatabase
 import com.example.sharequestion.util.permission
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.Firebase
@@ -81,7 +82,12 @@ class FeedFragment : Fragment() ,permission{
                 binding.feedRecyclerView.layoutManager = LinearLayoutManager(requireContext())
                 binding.feedRecyclerView.adapter = adapter
             }
+            uploadDao(myDownloadArray)
         }
+    }
+    fun uploadDao(questions: ArrayList<Question>){
+        val dao = QuestionDatabase(requireContext()).questionDao()
+        dao.insertQuestions(*questions.toTypedArray())
     }
 
     //get data from question collection

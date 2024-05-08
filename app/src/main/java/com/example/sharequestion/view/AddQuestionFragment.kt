@@ -49,6 +49,7 @@ class AddQuestionFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        imgUri = Uri.EMPTY
         registerLauncher()
         intentGallery = Intent(Intent.ACTION_PICK,MediaStore.Images.Media.
         EXTERNAL_CONTENT_URI)
@@ -60,9 +61,14 @@ class AddQuestionFragment : Fragment() {
         }
 
         binding.addQuestionButtton.setOnClickListener {view ->
-            imgUri.let {
-                uploadFile(view,it)
+            if(imgUri == Uri.EMPTY){
+                Toast.makeText(requireContext(),"You can't add only text",Toast.LENGTH_LONG).show()
+            }else{
+                imgUri.let {
+                    uploadFile(view,it)
+                }
             }
+
         }
     }
 
