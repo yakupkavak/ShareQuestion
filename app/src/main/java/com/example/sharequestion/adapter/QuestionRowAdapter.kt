@@ -17,11 +17,13 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.sharequestion.R
 import com.example.sharequestion.databinding.QuestionRowBinding
 import com.example.sharequestion.model.Comment
 import com.example.sharequestion.model.Question
 import com.example.sharequestion.util.downloadUrl
 import com.example.sharequestion.util.permission
+import com.example.sharequestion.util.setImgCorrect
 import com.example.sharequestion.view.AddQuestionFragment
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.CoroutineScope
@@ -60,6 +62,7 @@ class QuestionRowAdapter(val context: Context,val permission: permission,val que
         //select comment image
         holder.binding.addImageComment.setOnClickListener {
             permission.askPermission(it)
+            holder.binding.addImageComment.setImgCorrect()
         }
 
         //send comment

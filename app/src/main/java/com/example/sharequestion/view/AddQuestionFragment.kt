@@ -1,8 +1,10 @@
 package com.example.sharequestion.view
 
 import android.app.Activity
+import android.content.ContentResolver
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -48,14 +50,15 @@ class AddQuestionFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         registerLauncher()
-
         intentGallery = Intent(Intent.ACTION_PICK,MediaStore.Images.Media.
         EXTERNAL_CONTENT_URI)
 
         binding.questionImage.setOnClickListener {
             //check sdk for media or external permission
             askPermission(it)
+
         }
+
         binding.addQuestionButtton.setOnClickListener {view ->
             imgUri.let {
                 uploadFile(view,it)
@@ -63,7 +66,6 @@ class AddQuestionFragment : Fragment() {
         }
     }
     fun uploadFile(view: View,uri: Uri){
-
         val dbFire = Firebase.firestore
         val storageRef = Firebase.storage.reference
 
@@ -73,7 +75,6 @@ class AddQuestionFragment : Fragment() {
 
         //put image to storage
         imageRef.putFile(uri).addOnCompleteListener {
-
             imageRef.downloadUrl.addOnCompleteListener{downloadUrl ->
                 //add question on firestorage
                 val question = hashMapOf(
@@ -92,14 +93,6 @@ class AddQuestionFragment : Fragment() {
             println(it.localizedMessage)
         }
     }
-
-
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
     //implement launchers function for permission and intent
     fun askPermission(it:View){
         if (Build.VERSION.SDK_INT > 32){
@@ -144,7 +137,6 @@ class AddQuestionFragment : Fragment() {
         }
 
     }
-
     fun registerLauncher(){
         activityResultLauncher = registerForActivityResult(ActivityResultContracts.
         StartActivityForResult()){result->
@@ -158,6 +150,10 @@ class AddQuestionFragment : Fragment() {
                     }
                 }
             }
+            val contentResolver = requireContext().contentResolver
+            val stream = contentResolver.openInputStream(imgUri)
+            val bitmap = BitmapFactory.decodeStream(stream)
+            binding.questionImage.setImageBitmap(bitmap)
         }
         permissionLauncher = registerForActivityResult(ActivityResultContracts.
         RequestPermission()){
@@ -174,4 +170,8 @@ class AddQuestionFragment : Fragment() {
         }
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }
